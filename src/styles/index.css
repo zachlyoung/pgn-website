@@ -12,7 +12,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 50px;
+    height: 60px;
     z-index: 1;
 }
 
@@ -20,7 +20,7 @@ body {
     background-color: transparent;
 }
 
-.navbar__transparent .toggle__bar {
+.navbar--transparent .toggle__bar {
     background-color: #fff;
 }
 
@@ -41,25 +41,52 @@ body {
     align-items: center;
 }
 
+.navbar__buttons--expand {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    display: flex !important;
+    flex-direction: column;
+}
+
+.navbar__buttons--expand .navbar__link {
+    margin: 0;
+}
+
+.navbar__buttons--expand > * {
+    margin-bottom: 20px;
+}
+
 .navbar__buttons > a {
     text-decoration: none;
 }
 
 .navbar__link {
     margin: 0 20px 0 0;
-    color: #fff;
     font-weight: 300;
     font-size: 14pt;
 }
 
-.navbar__link:hover {
+.navbar--transparent .navbar__link {
+    color: #fff;
+}
+
+.navbar--opaque .navbar__link {
+    color: #000;
+}
+
+.navbar--transparent .navbar__link:hover {
     color: #adadad;
+}
+
+.navbar--opaque .navbar__link:hover {
+    color: #585858;
 }
 
 .navbar__button {
     background-color: transparent;
-    color: #fff;
-    border: 2px solid #fff;
     border-radius: 3px;
     padding: 5px 20px;
     font-size: 14pt;
@@ -68,9 +95,63 @@ body {
     outline: none;
 }
 
-.navbar__button:hover {
+.navbar--transparent .navbar__button {
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+.navbar--opaque .navbar__button {
+    color: #000;
+    border: 1px solid #000;
+}
+
+.navbar--transparent .navbar__button:hover {
     color: #adadad;
-    border: 2px solid #adadad;
+    border: 1px solid #adadad;
+}
+
+.navbar--opaque .navbar__button:hover {
+    color: #585858;
+    border: 1px solid #585858;
+}
+
+.navbar__rush-link {
+    display: block;
+}
+
+.navbar__rush-button {
+    display: none;
+}
+
+.navbar__toggle {
+    outline: none;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    position: relative;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+}
+
+.toggle__bar {
+    position: absolute;
+    height: 4px;
+    border-radius: 2px;
+    width: 100%;
+    background: #fff;
+}
+
+#top-bar {
+    top: 3px;
+}
+
+#middle-bar {
+    top: 13px;
+}
+
+#bottom-bar {
+    top: 23px;
 }
 
 .jumbotron {
@@ -114,7 +195,55 @@ body {
     color: #adadad;
 }
 
-@media only screen and (min-width: 800px) {
+.content-section {
+    position: relative;
+    min-height: 300px;
+    padding: 30px 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.content-section:nth-child(2n) {
+    background-color: #efefef;
+}
+
+.content-section__anchor {
+    position: absolute;
+    top: -60px;
+}
+
+
+.content-section__wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content-section__header {
+    margin: 0;
+    font-size: 30pt;
+    font-weight: 100;
+}
+
+.content-section__desc {
+    font-size: 14pt;
+    font-weight: 300;
+    margin: 30px 0px 20px;
+    text-align: center;
+}
+
+.icons {
+    display: flex;
+    flex-direction: row;
+}
+
+.icons > *:nth-child(2) {
+    margin: 0 20px;
+}
+
+.icons__link {
+    color: #000;
 }
 
 @media only screen and (min-width: 800px) {
@@ -128,50 +257,28 @@ body {
     .jumbotron__header {
         font-size: 50pt;
     }
+    .jumbotron__desc {
+        font-size: 18pt;
+    }
     .navbar__toggle {
         display: none;
     }
     .navbar__buttons {
         display: flex;
     }
-}
-
-section {
-    height: 300px;
-    margin: 10px 0;
-    background-color: #efefef;
-}
-
-
-.navbar__toggle {
-    outline: none;
-    background-color: transparent;
-    padding: 0;
-    border: none;
-    position: fixed;
-    top: 10px;
-    right: 20px;
-    height: 30px;
-    width: 30px;
-    cursor: pointer;
-}
-
-.toggle__bar {
-    position: absolute;
-    height: 4px;
-    border-radius: 2px;
-    width: 100%;
-    background: #fff;
-}
-
-#top-bar {
-    top: 3px;
-}
-
-#middle-bar {
-    top: 13px;
-}
-
-#bottom-bar {
-    top: 23px;
+    .navbar__rush-link {
+        display: none;
+    }
+    .navbar__rush-button {
+        display: block;
+    }
+    .content-section {
+        padding: 60px 0;
+    }
+    .content-section__header {
+        font-size: 42pt;
+    }
+    .content-section__wrapper {
+        width: 80%;
+    }
 }
