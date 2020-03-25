@@ -452,7 +452,7 @@ body {
     margin-right: 5px;
 }
 
-@media only screen and (min-width: 500px) {
+@media only screen and (min-width: 400px) {
     .filter-widget__cards {
         grid-template-columns: 1fr 1fr;
     }
