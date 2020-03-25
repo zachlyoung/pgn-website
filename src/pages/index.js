@@ -12,13 +12,16 @@ import { faEnvelope, faChevronLeft, faChevronRight } from '@fortawesome/free-sol
 import "../styles/index.css"
 
 class IndexPage extends React.Component {
-  galleryArray;
   constructor(props) {
     super(props);
+
+    // Sort the gallery array according to Contnetful indices
     let galleryArray = props.data.allContentfulGallery.edges;
     galleryArray.sort(function(a,b) {
       return a.index - b.index;
     });
+
+    // Get brothers in leadership and put brothers into JSON in order to put them in buckets
 
     let brothersMap = {};
     let leadershipArray = [];
@@ -37,12 +40,19 @@ class IndexPage extends React.Component {
         brothersMap[greek].push(props.data.allContentfulBrothers.edges[i]);
       }
     }
+
+    // Format brothers in leadership to JSON object
+
     let leadershipClass = {};
     leadershipClass.category = "LEADERSHIP";
     leadershipClass.data = leadershipArray;
 
+    // Place leadership JSON object in array
+
     let leadershipBuffer = [];
     leadershipBuffer.push(leadershipClass);
+
+    // Format brothers to JSON object 
     let brothersArray = [];
     for (let key in brothersMap)
     {
@@ -51,19 +61,22 @@ class IndexPage extends React.Component {
       greekClass.data = brothersMap[key];
       brothersArray.push(greekClass);
     }
+    // Sort classes by greek alphabetical order
     let order = ["ALPHA","BETA","GAMMA","DELTA","EPSILON","ZETA","ETA","THETA","IOTA","KAPPA","LAMBDA","MU","NU","XI","OMICRON","PI","RHO","SIGMA","TAU","UPSILON","PHI","CHI","PSI","OMEGA"]
     brothersArray.sort(function(a,b) {
       return order.indexOf(b.category) - order.indexOf(a.category);
     })
     for (let i = 0; i < brothersArray.length; i++)
     {
+      // Sort brothers alphabetically
       brothersArray[i].data.sort(function(a,b) {
         return a.node.name.toLowerCase().localeCompare(b.node.name.toLowerCase());
       });
     }
+    // Concatenate brothers JSON objects by appending with leadership JSON object
     brothersArray = leadershipBuffer.concat(brothersArray);
-    console.log(brothersArray);
 
+    // Put careers into JSON in order to put them in buckets
     let careersMap = {};
     for (let i = 0; i < props.data.allContentfulCareers.edges.length; i++) {
       let sector = props.data.allContentfulCareers.edges[i].node.sector.toUpperCase();
@@ -77,6 +90,7 @@ class IndexPage extends React.Component {
       }
     }
 
+    // Format careers to JSON object to place into array
     let careersArray = [];
     for (let key in careersMap)
     {
@@ -85,21 +99,25 @@ class IndexPage extends React.Component {
       sectorIndustry.data = careersMap[key];
       careersArray.push(sectorIndustry);
     }
+    // Sort career sectors alphabetically
     careersArray.sort(function(a,b) {
       return a.sector.toLowerCase().localeCompare(b.sector.toLowerCase());
     })
     for (let i = 0; i < careersArray.length; i++)
     {
+      // Sort careers alphabetically
       careersArray[i].data.sort(function(a,b) {
         return a.node.name.toLowerCase().localeCompare(b.node.name.toLowerCase());
       });
     }
 
+    // Get rush events and sort by start time
     let rushEventsArray = props.data.allContentfulEvents.edges;
     rushEventsArray.sort(function(a,b) {
       return a.node.startTime.localeCompare(b.node.startTime)
     })
 
+    // Init state and bind handlers
     this.state = {
         topScreen: true,
         mobile: true,
@@ -122,18 +140,23 @@ class IndexPage extends React.Component {
     this.handleCareersFilter = this.handleCareersFilter.bind(this);
   }
   componentDidMount() {
+    // Check mobile on mount
     this.updateMobile();
+    // Add event listeners
     window.addEventListener('resize', this.handleResize);
     window.addEventListener('scroll', this.handleScroll)
   }
   componentWillUnmount() {
+    // Remove event listeners when component unmounts
     window.removeEventListener('resize', this.handleResize);
     window.removeEventListener('scroll', this.handleScroll)
   }
   handleResize() {
+    // Check mobile on resize
     this.updateMobile();
   }
   updateMobile() {
+    // Check to see if the user has a window width of less than 1000 (mobile) or not
     let windowWidth = window.innerWidth;
     if (windowWidth < 1000 && !this.state.mobile) {
       this.setState({
@@ -148,13 +171,16 @@ class IndexPage extends React.Component {
     }
   }
   handleScroll() {
+    // Get the distance of scroll to the top
     let scrollTop = (window.pageYOffset || document.documentElement.scrollTop)  - (document.documentElement.clientTop || 0);
+    // Check to see if the user is at top of screen
     if (scrollTop > 5 && this.state.topScreen === true)
     {
       this.setState({
         topScreen: false,
       });
     }
+    // Otherwise user has scrolled down
     else if (scrollTop <= 5 && this.state.topScreen === false)
     {
       this.setState({
@@ -162,6 +188,7 @@ class IndexPage extends React.Component {
       });
     }
   }
+  // Manage the state of the navbar toggle
   handleToggle()
   {
     this.setState({
@@ -170,16 +197,22 @@ class IndexPage extends React.Component {
   }
   handleGalleryClick(i)
   {
+
+    // Get the current gallery Index
     let curr = this.state.galleryIndex;
+    // If the user toggled left
     if (i)
     {
+      // Wrap index to make sure it doesn't overflow
       if (curr === 0)
       {
         curr = this.state.galleryCount;
       }
       curr--;
     }
-    else{
+    // If the user toggled right
+    else {
+      // Wrap index to make sure it doesn't overflow
       curr++;
       if (curr === this.state.galleryCount)
       {
@@ -190,12 +223,14 @@ class IndexPage extends React.Component {
       galleryIndex: curr
     });
   }
+  // Set index to selected button to filter brothers
   handleBrothersFilter(i)
   {
     this.setState({
       brothersFilterIndex: i,
     });
   }
+  // Set index to selected button to filter careers
   handleCareersFilter(i)
   {
     this.setState({
