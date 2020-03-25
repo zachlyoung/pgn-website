@@ -11,6 +11,8 @@ import { faEnvelope, faChevronLeft, faChevronRight } from '@fortawesome/free-sol
 
 import "../styles/index.css"
 
+// TODO: SEPARATE PAGES INTO COMPONENTS FOR BETTER READABILITY
+
 class IndexPage extends React.Component {
   constructor(props) {
     super(props);
@@ -395,7 +397,7 @@ class IndexPage extends React.Component {
             <div className="content-section__detail">
               <h2 className="content-section__header">RUSH</h2>
               <p className="content-section__desc content-section__desc--wrap mt-4">{this.state.data.rushDescription.value.value}</p>
-              <a href={this.state.data.rushLink.value.value}><button className="content-section__button mt-2">REGISTER FOR RUSH</button></a>
+              <a href={this.state.data.rushLink.value.value}><button className="content-section__button mt-2">REGISTER</button></a>
             </div>
           </div>
         </section>
