@@ -312,8 +312,8 @@ class IndexPage extends React.Component {
                       <div key={index} className="filter-widget__card">
                         <Image className="card__photo card__photo--tall" fluid={obj.node.headshot.fluid} alt="logo"/>
                         <div className="card__details">
-                          <div className="card__text">
-                            <h5 className="card__name mr-1">{obj.node.name}</h5>
+                          <div className="card__text mr-1">
+                            <h5 className="card__name">{obj.node.name}</h5>
                             <h5 className="card__position">{obj.node.position}</h5>
                           </div>
                           <a className="icons__link" href={obj.node.linkedinUrl}><FontAwesomeIcon icon={faLinkedin} size="3x" /></a>
@@ -383,7 +383,7 @@ class IndexPage extends React.Component {
                   let minuteEnd = parseInt(endTime.substring(14,16));
 
                   return (
-                    <div className="event mb-4">
+                    <div key={index} className="event mb-4">
                       <h3 className="event__title">{month}.{day} | {obj.node.title}</h3>
                       <h6 className="event__subtitle mt-1 mb-2">{(hourBegin === 0 || hourBegin === 12) ? '12' : (hourBegin % 12)}:{(minuteBegin < 10) ? ('0' + minuteBegin) : minuteBegin} {(hourBegin >= 12) ? 'PM' : 'AM'} - {(hourEnd === 0 || hourEnd === 12) ? '12' : (hourEnd % 12) % 12}:{(minuteEnd < 10) ? ('0' + minuteEnd) : minuteEnd} {(hourEnd >= 12) ? 'PM' : 'AM'} at {obj.node.location}</h6>
                       <p className="event__desc">{obj.node.description}</p>
