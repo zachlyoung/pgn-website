@@ -264,7 +264,7 @@ class IndexPage extends React.Component {
           <div className="jumbotron__wrapper">
             <div className="jumbotron__details">
               <h1 className="jumbotron__header">{this.state.data.jumbotronHeader.value.value}</h1>
-              <p className="jumbotron__desc">We are a co-ed professional business fraternity at Washington University in St. Louis open to all majors and schools.</p>
+              <p className="jumbotron__desc">{this.state.data.jumbotronSubtitle.value.value}</p>
               <a href="#rush"><button className="jumbotron__button">Learn More</button></a>
             </div>
           </div>
@@ -274,8 +274,8 @@ class IndexPage extends React.Component {
           <div className="content-section__wrapper content-section__wrapper--row content-section__wrapper-left">
             <div className="content-section__detail">
               <h2 className="content-section__header">ABOUT</h2>
-              <em className="content-section__emphasis mt-4">We are one of the largest co-ed professional business fraternities in the United States!</em>
-              <p className="content-section__desc mt-1">Phi Gamma Nu aims to always be at the forefront of business achievement and professional competency. Comprised of professionally focused students from all colleges of the university, Phi Gamma Nu emphasizes a strong passion for a career in business, an eagerness to give back to the community, and above all, the happiness, growth and success of its brotherhood.</p>
+              <em className="content-section__emphasis mt-4">{this.state.data.aboutEmphasis.value.value}</em>
+              <p className="content-section__desc mt-1">{this.state.data.aboutDescription.value.value}</p>
               <a href="http://www.phigammanu.com"><button className="content-section__button mt-2">VISIT WEBSITE</button></a>
             </div>
             <div className="content-section__main-wrapper">
@@ -293,7 +293,7 @@ class IndexPage extends React.Component {
             </div>
             <div className="content-section__detail">
               <h2 className="content-section__header">GALLERY</h2>
-              <p className="content-section__desc mt-4">Take a look at some of the photos we have taken at our events. Our work has a strong emphasis on our three foundational pillars: philanthropy, brotherhood, and professionalism.</p>
+              <p className="content-section__desc mt-4">{this.state.data.galleryDescription.value.value}</p>
             </div>
           </div>
         </section>
@@ -360,11 +360,11 @@ class IndexPage extends React.Component {
           <div className="content-section__wrapper">
             <div className="content-section__detail content-section__detail--middle">
               <h2 className="content-section__header">CONTACT US</h2>
-              <p className="content-section__desc content-section__desc--wrap mt-4 mb-4">Check us out on social media! Please reach out to our email with any questions or concerns.</p>
+              <p className="content-section__desc content-section__desc--wrap mt-4 mb-4">{this.state.data.contactDescription.value.value}</p>
               <div className="icons">
-                <a className="icons__link" href="https://instagram.com/wustlpgn?igshid=1pf6ghfj04xj4"><FontAwesomeIcon icon={faInstagramSquare} size="4x" /></a>
-                <a className="icons__link mr-2 ml-2" href="https://www.facebook.com/wustlpgn/"><FontAwesomeIcon icon={faFacebookSquare} size="4x" /></a>
-                <a className="icons__link" href="mailto: phigammanuwustl@gmail.com"><FontAwesomeIcon icon={faEnvelope} size="4x" /></a>
+                <a className="icons__link" href={this.state.data.instagramLink.value.value}><FontAwesomeIcon icon={faInstagramSquare} size="4x" /></a>
+                <a className="icons__link mr-2 ml-2" href={this.state.data.facebookLink.value.value}><FontAwesomeIcon icon={faFacebookSquare} size="4x" /></a>
+                <a className="icons__link" href={"mailto: " + this.state.data.email.value.value}><FontAwesomeIcon icon={faEnvelope} size="4x" /></a>
               </div>
             </div>
           </div>
@@ -476,12 +476,52 @@ export const query = graphql`
         value
       }
     }
+    jumbotronSubtitle: contentfulText(title:{eq: "jumbotronSubtitle"}) {
+      value {
+        value
+      }
+    }
+    aboutEmphasis: contentfulText(title:{eq: "aboutEmphasis"}) {
+      value {
+        value
+      }
+    }
+    aboutDescription: contentfulText(title:{eq: "aboutDescription"}) {
+      value {
+        value
+      }
+    }
+    galleryDescription: contentfulText(title:{eq: "galleryDescription"}) {
+      value {
+        value
+      }
+    }
     rushDescription: contentfulText(title:{eq: "rushDescription"}) {
       value {
         value
       }
     }
     rushLink: contentfulText(title:{eq: "rushLink"}) {
+      value {
+        value
+      }
+    }
+    contactDescription: contentfulText(title:{eq: "contactDescription"}) {
+      value {
+        value
+      }
+    }
+    instagramLink: contentfulText(title:{eq: "instagramLink"}) {
+      value {
+        value
+      }
+    }
+    facebookLink: contentfulText(title:{eq: "facebookLink"}) {
+      value {
+        value
+      }
+    }
+    email: contentfulText(title:{eq: "email"}) {
       value {
         value
       }
