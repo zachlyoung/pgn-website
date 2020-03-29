@@ -4,198 +4,25 @@ import { graphql } from "gatsby"
 import Image from "gatsby-image"
 import BackgroundImage from "gatsby-background-image"
 import SEO from "../components/seo"
+import Navbar from "../components/navbar"
+import Filter from "../components/filter"
+import Gallery from "../components/gallery"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faInstagramSquare, faFacebookSquare, faLinkedin } from '@fortawesome/free-brands-svg-icons'
-import { faEnvelope, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { faInstagramSquare, faFacebookSquare } from '@fortawesome/free-brands-svg-icons'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 
 import "../styles/index.css"
-
-// TODO: SEPARATE PAGES INTO COMPONENTS FOR BETTER READABILITY
 
 class IndexPage extends React.Component {
   constructor(props) {
     super(props);
 
-    // Sort the gallery array according to Contnetful indices
-    let galleryArray = props.data.allContentfulGallery.edges;
-    galleryArray.sort(function(a,b) {
-      return a.index - b.index;
-    });
-
-    // Get brothers in leadership and put brothers into JSON in order to put them in buckets
-
-    let brothersMap = {};
-    let leadershipArray = [];
-    for (let i = 0; i < props.data.allContentfulBrothers.edges.length; i++) {
-      let greek = props.data.allContentfulBrothers.edges[i].node.greek.toUpperCase();
-      if (props.data.allContentfulBrothers.edges[i].node.position)
-      {
-        leadershipArray.push(props.data.allContentfulBrothers.edges[i]);
-      }
-      if (!(greek in brothersMap))
-      {
-        brothersMap[greek] = [props.data.allContentfulBrothers.edges[i]];
-      }
-      else 
-      {
-        brothersMap[greek].push(props.data.allContentfulBrothers.edges[i]);
-      }
-    }
-
-    // Format brothers in leadership to JSON object
-
-    let leadershipClass = {};
-    leadershipClass.category = "LEADERSHIP";
-    leadershipClass.data = leadershipArray;
-
-    // Place leadership JSON object in array
-
-    let leadershipBuffer = [];
-    leadershipBuffer.push(leadershipClass);
-
-    // Format brothers to JSON object 
-    let brothersArray = [];
-    for (let key in brothersMap)
-    {
-      let greekClass = {};
-      greekClass.category = key;
-      greekClass.data = brothersMap[key];
-      brothersArray.push(greekClass);
-    }
-    // Sort classes by greek alphabetical order
-    let order = ["ALPHA","BETA","GAMMA","DELTA","EPSILON","ZETA","ETA","THETA","IOTA","KAPPA","LAMBDA","MU","NU","XI","OMICRON","PI","RHO","SIGMA","TAU","UPSILON","PHI","CHI","PSI","OMEGA"]
-    brothersArray.sort(function(a,b) {
-      return order.indexOf(b.category) - order.indexOf(a.category);
-    })
-    for (let i = 0; i < brothersArray.length; i++)
-    {
-      // Sort brothers alphabetically
-      brothersArray[i].data.sort(function(a,b) {
-        return a.node.name.toLowerCase().localeCompare(b.node.name.toLowerCase());
-      });
-    }
-    // Concatenate brothers JSON objects by appending with leadership JSON object
-    brothersArray = leadershipBuffer.concat(brothersArray);
-
-    // Put careers into JSON in order to put them in buckets
-    let careersMap = {};
-    for (let i = 0; i < props.data.allContentfulCareers.edges.length; i++) {
-      let sector = props.data.allContentfulCareers.edges[i].node.sector.toUpperCase();
-      if (!(sector in careersMap))
-      {
-        careersMap[sector] = [props.data.allContentfulCareers.edges[i]];
-      }
-      else 
-      {
-        careersMap[sector].push(props.data.allContentfulCareers.edges[i]);
-      }
-    }
-
-    // Format careers to JSON object to place into array
-    let careersArray = [];
-    for (let key in careersMap)
-    {
-      let sectorIndustry = {};
-      sectorIndustry.sector = key;
-      sectorIndustry.data = careersMap[key];
-      careersArray.push(sectorIndustry);
-    }
-    // Sort career sectors alphabetically
-    careersArray.sort(function(a,b) {
-      return a.sector.toLowerCase().localeCompare(b.sector.toLowerCase());
-    })
-    for (let i = 0; i < careersArray.length; i++)
-    {
-      // Sort careers alphabetically
-      careersArray[i].data.sort(function(a,b) {
-        return a.node.name.toLowerCase().localeCompare(b.node.name.toLowerCase());
-      });
-    }
-
-    // Get rush events and sort by start time
-    let rushEventsArray = props.data.allContentfulEvents.edges;
-    rushEventsArray.sort(function(a,b) {
-      return a.node.startTime.localeCompare(b.node.startTime)
-    })
-
     // Init state and bind handlers
     this.state = {
-        topScreen: true,
-        mobile: true,
-        navbarExpand: false,
-        data: props.data,
-        galleryCount: Object.keys(props.data.allContentfulGallery.edges).length,
         galleryIndex: 0,
-        galleryArray: galleryArray,
-        brothersFilterIndex: 0,
-        brothersArray: brothersArray,
-        careersFilterIndex: 0,
-        careersArray: careersArray,
-        rushEvents: rushEventsArray,
     }
-    this.handleToggle = this.handleToggle.bind(this);
-    this.handleScroll = this.handleScroll.bind(this);
-    this.handleResize = this.handleResize.bind(this);
     this.handleGalleryClick = this.handleGalleryClick.bind(this);
-    this.handleBrothersFilter = this.handleBrothersFilter.bind(this);
-    this.handleCareersFilter = this.handleCareersFilter.bind(this);
-  }
-  componentDidMount() {
-    // Check mobile on mount
-    this.updateMobile();
-    // Add event listeners
-    window.addEventListener('resize', this.handleResize);
-    window.addEventListener('scroll', this.handleScroll)
-  }
-  componentWillUnmount() {
-    // Remove event listeners when component unmounts
-    window.removeEventListener('resize', this.handleResize);
-    window.removeEventListener('scroll', this.handleScroll)
-  }
-  handleResize() {
-    // Check mobile on resize
-    this.updateMobile();
-  }
-  updateMobile() {
-    // Check to see if the user has a window width of less than 1000 (mobile) or not
-    let windowWidth = window.innerWidth;
-    if (windowWidth < 1000 && !this.state.mobile) {
-      this.setState({
-        mobile: true,
-      });
-    }
-    else if (windowWidth >= 1000 && this.state.mobile)
-    {
-      this.setState({
-        mobile: false,
-      });
-    }
-  }
-  handleScroll() {
-    // Get the distance of scroll to the top
-    let scrollTop = (window.pageYOffset || document.documentElement.scrollTop)  - (document.documentElement.clientTop || 0);
-    // Check to see if the user is at top of screen
-    if (scrollTop > 5 && this.state.topScreen === true)
-    {
-      this.setState({
-        topScreen: false,
-      });
-    }
-    // Otherwise user has scrolled down
-    else if (scrollTop <= 5 && this.state.topScreen === false)
-    {
-      this.setState({
-        topScreen: true,
-      });
-    }
-  }
-  // Manage the state of the navbar toggle
-  handleToggle()
-  {
-    this.setState({
-      navbarExpand: !this.state.navbarExpand,
-    });
   }
   handleGalleryClick(i)
   {
@@ -203,12 +30,13 @@ class IndexPage extends React.Component {
     // Get the current gallery Index
     let curr = this.state.galleryIndex;
     // If the user toggled left
+    let galleryCount = Object.keys(this.props.data.allContentfulGallery.edges).length;
     if (i)
     {
       // Wrap index to make sure it doesn't overflow
       if (curr === 0)
       {
-        curr = this.state.galleryCount;
+        curr = galleryCount;
       }
       curr--;
     }
@@ -216,7 +44,7 @@ class IndexPage extends React.Component {
     else {
       // Wrap index to make sure it doesn't overflow
       curr++;
-      if (curr === this.state.galleryCount)
+      if (curr === galleryCount)
       {
         curr = 0;
       }
@@ -225,158 +53,195 @@ class IndexPage extends React.Component {
       galleryIndex: curr
     });
   }
-  // Set index to selected button to filter brothers
-  handleBrothersFilter(i)
+  getBrothersData()
   {
-    this.setState({
-      brothersFilterIndex: i,
-    });
+    const data = this.props.data;
+
+    // Get brothers in leadership and put brothers into JSON in order to put them in buckets
+    let brothersMap = {};
+    let leadershipData = [];
+    for (let i = 0; i < data.allContentfulBrothers.edges.length; i++) {
+      let category = data.allContentfulBrothers.edges[i].node.greek.toUpperCase();
+      if (data.allContentfulBrothers.edges[i].node.position)
+      {
+        leadershipData.push(data.allContentfulBrothers.edges[i]);
+      }
+      if (!(category in brothersMap))
+      {
+        brothersMap[category] = [data.allContentfulBrothers.edges[i]];
+      }
+      else 
+      {
+        brothersMap[category].push(data.allContentfulBrothers.edges[i]);
+      }
+    }
+
+    // Format brothers in leadership to JSON object
+    let leadershipMap = {};
+    leadershipMap.category = "LEADERSHIP";
+    leadershipMap.data = leadershipData;
+
+    // Place leadership JSON object in array
+    let leadershipBuffer = [];
+    leadershipBuffer.push(leadershipMap);
+
+    // Format brothers to JSON object to place into array
+    let brothersData = [];
+    for (let key in brothersMap)
+    {
+      let categoryMap = {};
+      categoryMap.category = key;
+      categoryMap.data = brothersMap[key];
+      brothersData.push(categoryMap);
+    }
+    // Sort classes by greek alphabetical order
+    let order = ["ALPHA","BETA","GAMMA","DELTA","EPSILON","ZETA","ETA","THETA","IOTA","KAPPA","LAMBDA","MU","NU","XI","OMICRON","PI","RHO","SIGMA","TAU","UPSILON","PHI","CHI","PSI","OMEGA"]
+    brothersData.sort(function(a,b) {
+      return order.indexOf(a.category) - order.indexOf(b.category);
+    })
+    for (let i = 0; i < brothersData.length; i++)
+    {
+      // Sort brothers alphabetically
+      brothersData[i].data.sort(function(a,b) {
+        return a.node.name.toLowerCase().localeCompare(b.node.name.toLowerCase());
+      });
+    }
+
+    // Concatenate brothers JSON objects by appending with leadership JSON object
+    brothersData = leadershipBuffer.concat(brothersData);
+    return brothersData;
   }
-  // Set index to selected button to filter careers
-  handleCareersFilter(i)
+  getCareersData()
   {
-    this.setState({
-      careersFilterIndex: i,
-    });
+    const data = this.props.data
+
+    // Put careers into JSON in order to put them in buckets
+    let careersMap = {};
+    for (let i = 0; i < data.allContentfulCareers.edges.length; i++) {
+      let category = data.allContentfulCareers.edges[i].node.sector.toUpperCase();
+      if (!(category in careersMap))
+      {
+        careersMap[category] = [data.allContentfulCareers.edges[i]];
+      }
+      else 
+      {
+        careersMap[category].push(data.allContentfulCareers.edges[i]);
+      }
+    }
+    console.log(careersMap);
+
+    // Format careers to JSON object to place into array
+    let careersData = [];
+    for (let key in careersMap)
+    {
+      let categoryMap = {};
+      categoryMap.category = key;
+      categoryMap.data = careersMap[key];
+      careersData.push(categoryMap);
+    }
+    // Sort career sectors alphabetically
+    careersData.sort(function(a,b) {
+      return a.category.toLowerCase().localeCompare(b.category.toLowerCase());
+    })
+    for (let i = 0; i < careersData.length; i++)
+    {
+      // Sort careers alphabetically
+      careersData[i].data.sort(function(a,b) {
+        return a.node.name.toLowerCase().localeCompare(b.node.name.toLowerCase());
+      });
+    }
+    return careersData;
   }
+
   render() {
+    const data = this.props.data;
+
+    let brothersData = this.getBrothersData();
+    let careersData = this.getCareersData();
+
+    // Get rush events and sort by start time
+    let rushEventsData = data.allContentfulEvents.edges;
+    rushEventsData.sort(function(a,b) {
+      return a.node.startTime.localeCompare(b.node.startTime)
+    })
+
     return (
       <div>
         <SEO title="Home" />
-        <nav className={(this.state.mobile || !this.state.topScreen) ? "navbar navbar--opaque" : "navbar navbar--transparent"}>
-          <a href="http://www.phigammanu.com"> <Image className="navbar__logo" fixed={(this.state.mobile || !this.state.topScreen) ? this.state.data.logoBlack.childImageSharp.fixed : this.state.data.logoWhite.childImageSharp.fixed} alt="logo"/></a>
-          <div className={(this.state.navbarExpand && this.state.mobile) ? "navbar__buttons navbar__buttons--expand" : "navbar__buttons"}>
-            <a href="#about"><h4 className="navbar__link">ABOUT</h4></a>
-            <a href="#gallery"><h4 className="navbar__link">GALLERY</h4></a>
-            <a href="#brothers"><h4 className="navbar__link">BROTHERS</h4></a>
-            <a href="#careers"><h4 className="navbar__link">CAREERS</h4></a>
-            <a href="#contact"><h4 className="navbar__link">CONTACT</h4></a>
-            <a href="#rush" className="navbar__rush-link"><h4 className="navbar__link">RUSH</h4></a>
-            <a href="#rush" className="navbar__rush-button"><button className="navbar__button">RUSH</button></a>
-          </div>
-          <button className="navbar__toggle" onClick={this.handleToggle}>
-            <div className="toggle__bar" id="top-bar"></div>
-            <div className="toggle__bar" id="middle-bar"></div>
-            <div className="toggle__bar" id="bottom-bar"></div>
-          </button>
-        </nav>
-        <BackgroundImage fluid={['linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75))', this.state.data.background.photo.fluid]} className="jumbotron">
+        <Navbar />
+        <BackgroundImage fluid={['linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75))', data.background.photo.fluid]} className="jumbotron">
           <div className="jumbotron__wrapper">
-            <div className="jumbotron__details">
-              <h1 className="jumbotron__header">{this.state.data.jumbotronHeader.value.value}</h1>
-              <p className="jumbotron__desc">{this.state.data.jumbotronSubtitle.value.value}</p>
+            <div className="jumbotron__detail">
+              <h1 className="jumbotron__header">{data.jumbotronHeader.value.value}</h1>
+              <p className="jumbotron__desc">{data.jumbotronSubtitle.value.value}</p>
               <a href="#rush"><button className="jumbotron__button">Learn More</button></a>
             </div>
           </div>
         </BackgroundImage>
-        <section className="content-section">
-          <div className="content-section__anchor" id="about"></div>
-          <div className="content-section__wrapper content-section__wrapper--row content-section__wrapper-left">
-            <div className="content-section__detail">
-              <h2 className="content-section__header">ABOUT</h2>
-              <em className="content-section__emphasis mt-4">{this.state.data.aboutEmphasis.value.value}</em>
-              <p className="content-section__desc mt-1">{this.state.data.aboutDescription.value.value}</p>
-              <a href="http://www.phigammanu.com"><button className="content-section__button mt-2">VISIT WEBSITE</button></a>
+        <section className="section-wrapper">
+          <div className="section-wrapper__anchor" id="about"></div>
+          <div className="section section--row section-left">
+            <div className="section__detail">
+              <h2 className="section__header">ABOUT</h2>
+              <em className="section__emphasis mt-4">{data.aboutEmphasis.value.value}</em>
+              <p className="section__desc mt-1">{data.aboutDescription.value.value}</p>
+              <a href="http://www.phigammanu.com"><button className="section__button mt-2">VISIT WEBSITE</button></a>
             </div>
-            <div className="content-section__main-wrapper">
-              <Image className="content-section__image" fluid={this.state.data.aboutPhoto.photo.fluid} alt="logo"/>
-            </div>
-          </div>
-        </section>
-        <section className="content-section">
-          <div className="content-section__anchor" id="gallery"></div>
-          <div className="content-section__wrapper content-section__wrapper--row content-section__wrapper-right">
-            <div className="content-section__main-wrapper">
-              <button className="gallery-button" onClick={() => this.handleGalleryClick(true)}><FontAwesomeIcon icon={faChevronLeft} size="4x" /></button>
-              <Image className="content-section__image mr-1 ml-1" fluid={this.state.galleryArray[this.state.galleryIndex].node.photo.fluid} alt="logo"/>
-              <button className="gallery-button" onClick={() => this.handleGalleryClick(false)}><FontAwesomeIcon icon={faChevronRight} size="4x" /></button>
-            </div>
-            <div className="content-section__detail">
-              <h2 className="content-section__header">GALLERY</h2>
-              <p className="content-section__desc mt-4">{this.state.data.galleryDescription.value.value}</p>
+            <div className="section__main">
+              <Image className="section__image" fluid={data.aboutPhoto.photo.fluid} alt="logo"/>
             </div>
           </div>
         </section>
-        <section className="content-section">
-          <div className="content-section__anchor" id="brothers"></div>
-          <div className="content-section__wrapper">
-            <div className="content-section__detail content-section__detail--middle">
-              <h2 className="content-section__header mb-4">BROTHERS</h2>
-              <div className="filter-widget">
-                <div className="filter-widget__buttons">
-                  {this.state.brothersArray.map((obj, index) => {
-                    return <button key={index} className={(index === this.state.brothersFilterIndex) ? "filter-widget__button filter-widget__button--active mb-1" : "filter-widget__button mb-1"} onClick={() => this.handleBrothersFilter(index)}>{obj.category}</button>
-                  })}
-                </div>
-                <div className="filter-widget__cards">
-                  {this.state.brothersArray[this.state.brothersFilterIndex].data.map((obj,index) => {
-                    return (
-                      <div key={index} className="filter-widget__card">
-                        <Image className="card__photo card__photo--tall" fluid={obj.node.headshot.fluid} alt="logo"/>
-                        <div className="card__details">
-                          <div className="card__text mr-1">
-                            <h5 className="card__name">{obj.node.name}</h5>
-                            <h5 className="card__position">{obj.node.position}</h5>
-                          </div>
-                          <a className="icons__link" href={obj.node.linkedinUrl}><FontAwesomeIcon icon={faLinkedin} size="3x" /></a>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+        <section className="section-wrapper">
+          <div className="section-wrapper__anchor" id="gallery"></div>
+          <div className="section section--row section-right">
+            <div className="section__main">
+              <Gallery />
+            </div>
+            <div className="section__detail">
+              <h2 className="section__header">GALLERY</h2>
+              <p className="section__desc mt-4">{data.galleryDescription.value.value}</p>
+            </div>
+          </div>
+        </section>
+        <section className="section-wrapper">
+          <div className="section-wrapper__anchor" id="brothers"></div>
+          <div className="section">
+            <div className="section__detail section__detail--middle">
+              <h2 className="section__header mb-4">BROTHERS</h2>
+              <Filter data={brothersData} type="brothers"/>
+            </div>
+          </div>
+        </section>
+        <section className="section-wrapper">
+          <div className="section-wrapper__anchor" id="careers"></div>
+          <div className="section">
+            <div className="section__detail section__detail--middle">
+              <h2 className="section__header mb-4">CAREERS</h2>
+              <Filter data={careersData} type="careers" />
+            </div>
+          </div>
+        </section>
+        <section className="section-wrapper">
+          <div className="section-wrapper__anchor" id="contact"></div>
+          <div className="section">
+            <div className="section__detail section__detail--middle">
+              <h2 className="section__header">CONTACT US</h2>
+              <p className="section__desc section__desc--wrap mt-4 mb-4">{data.contactDescription.value.value}</p>
+              <div className="icons-wrapper">
+                <a className="icons-link" href={data.instagramLink.value.value}><FontAwesomeIcon icon={faInstagramSquare} size="4x" /></a>
+                <a className="icons-link mr-2 ml-2" href={data.facebookLink.value.value}><FontAwesomeIcon icon={faFacebookSquare} size="4x" /></a>
+                <a className="icons-link" href={"mailto: " + data.email.value.value}><FontAwesomeIcon icon={faEnvelope} size="4x" /></a>
               </div>
             </div>
           </div>
         </section>
-        <section className="content-section">
-          <div className="content-section__anchor" id="careers"></div>
-          <div className="content-section__wrapper">
-            <div className="content-section__detail content-section__detail--middle">
-              <h2 className="content-section__header mb-4">CAREERS</h2>
-              <div className="filter-widget">
-                <div className="filter-widget__buttons">
-                  {this.state.careersArray.map((obj, index) => {
-                    return <button key={index} className={(index === this.state.careersFilterIndex) ? "filter-widget__button filter-widget__button--active mb-1" : "filter-widget__button mb-1"} onClick={() => this.handleCareersFilter(index)}>{obj.sector}</button>
-                  })}
-                </div>
-                <div className="filter-widget__cards">
-                  {this.state.careersArray[this.state.careersFilterIndex].data.map((obj,index) => {
-                    return (
-                      <div key={index} className="filter-widget__card">
-                        <Image className="card__photo card__photo--short" fluid={obj.node.photo.fluid} alt="logo"/>
-                        <div className="card__details">
-                          <div className="card__text mr-1">
-                            <h5 className="card__name mt-2 mb-2">{obj.node.name}</h5>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section className="content-section">
-          <div className="content-section__anchor" id="contact"></div>
-          <div className="content-section__wrapper">
-            <div className="content-section__detail content-section__detail--middle">
-              <h2 className="content-section__header">CONTACT US</h2>
-              <p className="content-section__desc content-section__desc--wrap mt-4 mb-4">{this.state.data.contactDescription.value.value}</p>
-              <div className="icons">
-                <a className="icons__link" href={this.state.data.instagramLink.value.value}><FontAwesomeIcon icon={faInstagramSquare} size="4x" /></a>
-                <a className="icons__link mr-2 ml-2" href={this.state.data.facebookLink.value.value}><FontAwesomeIcon icon={faFacebookSquare} size="4x" /></a>
-                <a className="icons__link" href={"mailto: " + this.state.data.email.value.value}><FontAwesomeIcon icon={faEnvelope} size="4x" /></a>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section className="content-section">
-          <div className="content-section__anchor" id="rush"></div>
-          <div className="content-section__wrapper content-section__wrapper--row content-section__wrapper-right">
-            <div className="content-section__main-wrapper">
-              <div className="events">
-                {this.state.rushEvents.map((obj,index) => {
+        <section className="section-wrapper">
+          <div className="section-wrapper__anchor" id="rush"></div>
+          <div className="section section--row section-right">
+            <div className="section__main">
+              <div className="events-wrapper">
+                {rushEventsData.map((obj,index) => {
                   let startTime = obj.node.startTime;
                   let month = parseInt(startTime.substring(5,7));
                   let day = parseInt(startTime.substring(8,10));
@@ -396,10 +261,10 @@ class IndexPage extends React.Component {
                 })}
               </div>
             </div>
-            <div className="content-section__detail">
-              <h2 className="content-section__header">RUSH</h2>
-              <p className="content-section__desc content-section__desc--wrap mt-4">{this.state.data.rushDescription.value.value}</p>
-              <a href={this.state.data.rushLink.value.value}><button className="content-section__button mt-2">REGISTER</button></a>
+            <div className="section__detail">
+              <h2 className="section__header">RUSH</h2>
+              <p className="section__desc section__desc--wrap mt-4">{data.rushDescription.value.value}</p>
+              <a href={data.rushLink.value.value}><button className="section__button mt-2">REGISTER</button></a>
             </div>
           </div>
         </section>
@@ -409,30 +274,12 @@ class IndexPage extends React.Component {
 }
 
 export const query = graphql`
-  {
+  query {
     background: contentfulPhotos(title: {eq: "background"}) {
       ...contentfulPhotosFields
     }
     aboutPhoto: contentfulPhotos(title: {eq: "aboutPhoto"}) {
       ...contentfulPhotosFields
-    }
-    logoWhite: file(relativePath: {eq: "logo-white.png"}) {
-      ...logoFields
-    }
-    logoBlack: file(relativePath: {eq: "logo-black.png"}) {
-      ...logoFields
-    }
-    allContentfulGallery {
-      edges {
-        node {
-          index
-          photo {
-            fluid {
-              ...GatsbyContentfulFluid
-            }
-          }
-        }
-      }
     }
     allContentfulBrothers {
       edges {

@@ -198,52 +198,57 @@ body {
     color: #adadad;
 }
 
-.content-section {
+.section-wrapper {
     position: relative;
     padding: 30px 20px;
     display: flex;
     justify-content: center;
 }
 
-.content-section:nth-child(2n) {
+.section-wrapper:nth-child(2n) {
     background-color: #efefef;
 }
 
-.content-section__anchor {
+.section-wrapper__anchor {
     position: absolute;
     top: -60px;
 }
 
 
-.content-section__wrapper {
+.section {
     width: 100%;
     display: flex;
     flex-direction: column;
 }
 
-.content-section__wrapper--row {
+.section--row {
     flex-direction: column;
 }
 
-.content-section__detail {
+.section__detail {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
 }
 
-.content-section__main-wrapper {
+.section__main {
     margin-top: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.content-section__image {
+.section__image {
     flex-grow: 1;
     -webkit-box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.5);
     -moz-box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.5);
     box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.5);
+}
+
+.gallery-wrapper {
+    display: flex;
+    width: 100%;
 }
 
 .gallery-button {
@@ -253,31 +258,31 @@ body {
     outline: none;
 }
 
-.content-section__wrapper-right .content-section__detail {
+.section-right .section__detail {
     order: 1;
 }
-.content-section__wrapper-right .content-section__main-wrapper  {
+.section-right .section__main  {
     order: 2;
 }
 
-.content-section__header {
+.section__header {
     margin: 0;
     font-size: 30pt;
     font-weight: 100;
 }
 
-.content-section__emphasis {
+.section__emphasis {
     font-family: 'Merriweather', serif;
     font-size: 20pt;
 }
 
-.content-section__desc {
+.section__desc {
     margin: 0;
     font-size: 14pt;
     font-weight: 300;
 }
 
-.content-section__button {
+.section__button {
     background-color: transparent;
     border-radius: 3px;
     padding: 5px 20px;
@@ -289,7 +294,7 @@ body {
     border: 1px solid #000;
 }
 
-.content-section__button:hover {
+.section__button:hover {
     color: #585858;
     border: 1px solid #585858;
 }
@@ -372,12 +377,12 @@ body {
     font-size: 12pt;
 }
 
-.icons {
+.icons-wrapper {
     display: flex;
     flex-direction: row;
 }
 
-.icons__link {
+.icons-link {
     color: #000;
 }
 
@@ -470,32 +475,32 @@ body {
     .jumbotron {
         padding: 50px 50px 0;
     }
-    .content-section {
+    .section-wrapper {
         padding: 30px 50px;  
     }
-    .content-section__detail {
+    .section__detail {
         align-items: flex-start;
         text-align: left;
         flex: 4 1 0;
     }
-    .content-section__detail--middle {
+    .section__detail--middle {
         align-items: center;
         text-align: center;
     }
-    .content-section__wrapper--row {
+    .section--row {
         flex-direction:row;
         align-items: center;
     }
-    .content-section__main-wrapper {
+    .section__main {
         flex: 5 1 0;
     }
-    .content-section__wrapper-left .content-section__main-wrapper {
+    .section-left .section__main {
         margin-left: 50px;
     }
-    .content-section__wrapper-right .content-section__detail {
+    .section-right .section__detail {
         order: 2;
     }
-    .content-section__wrapper-right .content-section__main-wrapper  {
+    .section-right .section__main  {
         order: 1;
         margin-right: 50px;
     }
@@ -522,7 +527,7 @@ body {
         max-width: none;
         width: 80%
     }
-    .jumbotron__details {
+    .jumbotron__detail {
         max-width: 600px;
     }
     .jumbotron__header {
@@ -543,23 +548,23 @@ body {
     .navbar__rush-button {
         display: block;
     }
-    .content-section {
+    .section-wrapper {
         padding: 60px 0;
     }
-    .content-section__header {
+    .section__header {
         font-size: 42pt;
     }
-    .content-section__wrapper {
+    .section {
         width: 80%;
     }
-    .content-section__emphasis {
+    .section__emphasis {
         font-size: 30pt;
     }
-    .content-section__desc {
+    .section__desc {
         font-size: 16pt;
     }
 
-    .content-section__desc--wrap {
+    .section__desc--wrap {
         max-width: 600px;
     }
     .filter-widget__cards {
