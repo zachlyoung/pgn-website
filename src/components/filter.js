@@ -39,7 +39,7 @@ class Filter extends React.Component {
                     <h5 className="card__name">{obj.node.name}</h5>
                     {(type === "brothers") ? <h5 className="card__position">{obj.node.position}</h5> : null }
                   </div>
-                  {(type === "brothers") ? <a className="icons-link" href={obj.node.linkedinUrl}><FontAwesomeIcon icon={faLinkedin} size="3x" /></a> : null}
+                  {(type === "brothers") ? <a className="icons-link" href={obj.node.linkedinUrl}><FontAwesomeIcon title="Linkedin" icon={faLinkedin} size="3x" /></a> : null}
                 </div>
               </div>
             );
