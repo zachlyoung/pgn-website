@@ -81,6 +81,14 @@ class Navbar extends React.Component {
               ...logoFields
             }
           }
+          
+          fragment logoFields on File {
+            childImageSharp {
+              fixed(width: 40) {
+                ...GatsbyImageSharpFixed
+              }
+            }
+          }
         `}
         render={(data) => (
           <nav className={(this.state.mobile || !this.state.topScreen) ? "navbar navbar--opaque" : "navbar navbar--transparent"}>

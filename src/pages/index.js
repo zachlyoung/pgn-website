@@ -289,7 +289,7 @@ export const query = graphql`
           position
           linkedinUrl
           headshot {
-            fluid {
+            fluid (maxWidth: 350) {
               ...GatsbyContentfulFluid
             }
           }
@@ -302,7 +302,7 @@ export const query = graphql`
           name
           sector
           photo {
-            fluid {
+            fluid (maxWidth: 350) {
               ...GatsbyContentfulFluid
             }
           }
@@ -377,16 +377,9 @@ export const query = graphql`
     }
   }
   
-  fragment logoFields on File {
-    childImageSharp {
-      fixed(width: 40) {
-        ...GatsbyImageSharpFixed
-      }
-    }
-  }
   fragment contentfulPhotosFields on ContentfulPhotos {
     photo {
-      fluid {
+      fluid (maxWidth: 1920) {
         ...GatsbyContentfulFluid
       }
     }
