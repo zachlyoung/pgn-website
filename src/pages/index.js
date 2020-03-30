@@ -14,6 +14,8 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 
 import "../styles/index.css"
 
+// TODO: CSS REWORK
+
 class IndexPage extends React.Component {
   constructor(props) {
     super(props);
@@ -169,7 +171,7 @@ class IndexPage extends React.Component {
       <div>
         <SEO title="Home" />
         <Navbar />
-        <BackgroundImage fluid={['linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75))', data.background.photo.fluid]} className="jumbotron">
+        <BackgroundImage loading="lazy" fluid={['linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75))', data.background.photo.fluid]} className="jumbotron">
           <div className="jumbotron__wrapper">
             <div className="jumbotron__detail">
               <h1 className="jumbotron__header">{data.jumbotronHeader.value.value}</h1>
@@ -188,7 +190,7 @@ class IndexPage extends React.Component {
               <a href="http://www.phigammanu.com"><button className="section__button mt-2">VISIT WEBSITE</button></a>
             </div>
             <div className="section__main">
-              <Image className="section__image" fluid={data.aboutPhoto.photo.fluid} alt="logo"/>
+              <Image loading="lazy" className="section__image" fluid={data.aboutPhoto.photo.fluid} alt="logo"/>
             </div>
           </div>
         </section>

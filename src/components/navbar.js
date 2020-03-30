@@ -92,7 +92,7 @@ class Navbar extends React.Component {
         `}
         render={(data) => (
           <nav className={(this.state.mobile || !this.state.topScreen) ? "navbar navbar--opaque" : "navbar navbar--transparent"}>
-            <a href="http://www.phigammanu.com"> <Image className="navbar__logo" fixed={(this.state.mobile || !this.state.topScreen) ? data.logoBlack.childImageSharp.fixed : data.logoWhite.childImageSharp.fixed} alt="logo"/></a>
+            <a href="http://www.phigammanu.com"> <Image loading="lazy" className="navbar__logo" fixed={(this.state.mobile || !this.state.topScreen) ? data.logoBlack.childImageSharp.fixed : data.logoWhite.childImageSharp.fixed} alt="logo"/></a>
             <div className={(this.state.navbarExpand && this.state.mobile) ? "navbar__buttons navbar__buttons--expand" : "navbar__buttons"}>
               <a href="#about"><h4 className="navbar__link">ABOUT</h4></a>
               <a href="#gallery"><h4 className="navbar__link">GALLERY</h4></a>
