@@ -65,9 +65,11 @@ class Navbar extends React.Component {
   }
   handleToggle()
   {
-    this.setState({
-      navbarExpand: !this.state.navbarExpand,
-    });
+    if (this.state.mobile) {
+      this.setState({
+        navbarExpand: !this.state.navbarExpand,
+      });
+    }
   }
   render() {
     return (
@@ -85,21 +87,21 @@ class Navbar extends React.Component {
           fragment logoFields on File {
             childImageSharp {
               fixed(width: 40) {
-                ...GatsbyImageSharpFixed_withWebp
+                ...GatsbyImageSharpFixed
               }
             }
           }
         `}
         render={(data) => (
           <nav className={(this.state.mobile || !this.state.topScreen) ? "navbar navbar--opaque" : "navbar navbar--transparent"}>
-            <a href="http://www.phigammanu.com"> <Image loading="lazy" className="navbar__logo" fixed={(this.state.mobile || !this.state.topScreen) ? data.logoBlack.childImageSharp.fixed : data.logoWhite.childImageSharp.fixed} alt="Logo"/></a>
+            <a href="http://www.phigammanu.com"> <Image className="navbar__logo" fixed={(this.state.mobile || !this.state.topScreen) ? data.logoBlack.childImageSharp.fixed : data.logoWhite.childImageSharp.fixed} alt="Logo"/></a>
             <div className={(this.state.navbarExpand && this.state.mobile) ? "navbar__buttons navbar__buttons--expand" : "navbar__buttons"}>
-              <a href="#about"><h4 className="navbar__link">ABOUT</h4></a>
-              <a href="#gallery"><h4 className="navbar__link">GALLERY</h4></a>
-              <a href="#brothers"><h4 className="navbar__link">BROTHERS</h4></a>
-              <a href="#careers"><h4 className="navbar__link">CAREERS</h4></a>
-              <a href="#contact"><h4 className="navbar__link">CONTACT</h4></a>
-              <a href="#rush" className="navbar__rush-link"><h4 className="navbar__link">RUSH</h4></a>
+              <a href="#about" onClick={this.handleToggle}><h4 className="navbar__link">ABOUT</h4></a>
+              <a href="#gallery" onClick={this.handleToggle}><h4 className="navbar__link">GALLERY</h4></a>
+              <a href="#brothers" onClick={this.handleToggle}><h4 className="navbar__link">BROTHERS</h4></a>
+              <a href="#careers" onClick={this.handleToggle}><h4 className="navbar__link">CAREERS</h4></a>
+              <a href="#contact" onClick={this.handleToggle}><h4 className="navbar__link">CONTACT</h4></a>
+              <a href="#rush" className="navbar__rush-link" onClick={this.handleToggle}><h4 className="navbar__link">RUSH</h4></a>
               <a href="#rush" className="navbar__rush-button"><button className="navbar__button">RUSH</button></a>
             </div>
             <button title="Navigation bar toggle" className="navbar__toggle" onClick={this.handleToggle}>

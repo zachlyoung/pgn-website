@@ -33,7 +33,7 @@ class Filter extends React.Component {
           {data[this.state.filterIndex].data.map((obj,index) => {
             return (
               <div key={index} className="filter-widget__card">
-                <Image backgroundColor="white" loading="lazy" className={(type === "brothers") ? "card__photo card__photo--tall" : "card__photo card__photo--short"} fluid={(type === "brothers") ? obj.node.headshot.fluid : obj.node.photo.fluid} alt="Photo"/>
+                <Image className={(type === "brothers") ? "card__photo card__photo--tall" : "card__photo card__photo--short"} fluid={(type === "brothers") ? obj.node.headshot.fluid : obj.node.photo.fluid} alt="Photo"/>
                 <div className="card__details">
                   <div className="card__text mr-1">
                     <h5 className="card__name">{obj.node.name}</h5>

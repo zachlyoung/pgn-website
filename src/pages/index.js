@@ -130,7 +130,6 @@ class IndexPage extends React.Component {
         careersMap[category].push(data.allContentfulCareers.edges[i]);
       }
     }
-    console.log(careersMap);
 
     // Format careers to JSON object to place into array
     let careersData = [];
@@ -171,8 +170,8 @@ class IndexPage extends React.Component {
       <div>
         <SEO title="Home" />
         <Navbar />
-        <BackgroundImage loading="lazy" fluid={['linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75))', data.background.photo.fluid]} className="jumbotron">
-          <div className="jumbotron__wrapper">
+        <BackgroundImage style={{ minHeight: '600px' }} fluid={['linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75))', data.background.photo.fluid]} className="jumbotron-wrapper">
+          <div className="jumbotron">
             <div className="jumbotron__detail">
               <h1 className="jumbotron__header">{data.jumbotronHeader.value.value}</h1>
               <p className="jumbotron__desc">{data.jumbotronSubtitle.value.value}</p>
@@ -190,7 +189,7 @@ class IndexPage extends React.Component {
               <a href="http://www.phigammanu.com"><button className="section__button mt-2">VISIT WEBSITE</button></a>
             </div>
             <div className="section__main">
-              <Image loading="lazy" className="section__image" fluid={data.aboutPhoto.photo.fluid} alt="About photo"/>
+              <Image className="section__image" fluid={data.aboutPhoto.photo.fluid} alt="About photo"/>
             </div>
           </div>
         </section>
@@ -279,15 +278,15 @@ export const query = graphql`
   query {
     background: contentfulPhotos(title: {eq: "background"}) {
       photo {
-        fluid (minHeight: 550) {
-          ...GatsbyContentfulFluid_withWebp
+        fluid {
+          ...GatsbyContentfulFluid
         }
       }
     }
     aboutPhoto: contentfulPhotos(title: {eq: "aboutPhoto"}) {
       photo {
         fluid {
-          ...GatsbyContentfulFluid_withWebp
+          ...GatsbyContentfulFluid
         }
       }
     }
@@ -300,7 +299,7 @@ export const query = graphql`
           linkedinUrl
           headshot {
             fluid {
-              ...GatsbyContentfulFluid_withWebp
+              ...GatsbyContentfulFluid
             }
           }
         }
@@ -313,7 +312,7 @@ export const query = graphql`
           sector
           photo {
             fluid {
-              ...GatsbyContentfulFluid_withWebp
+              ...GatsbyContentfulFluid
             }
           }
         }
