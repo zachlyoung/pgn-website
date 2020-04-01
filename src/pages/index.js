@@ -170,7 +170,7 @@ class IndexPage extends React.Component {
       <div>
         <SEO title="Home" />
         <Navbar />
-        <BackgroundImage style={{ minHeight: '600px' }} fluid={['linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75))', data.background.photo.fluid]} className="jumbotron-wrapper">
+        <BackgroundImage fluid={['linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75))', data.background.photo.fluid]} className="jumbotron-wrapper">
           <div className="jumbotron">
             <div className="jumbotron__detail">
               <h1 className="jumbotron__header">{data.jumbotronHeader.value.value}</h1>
@@ -278,14 +278,14 @@ export const query = graphql`
   query {
     background: contentfulPhotos(title: {eq: "background"}) {
       photo {
-        fluid {
+        fluid (sizes: "(max-width: 400) 400px, 100vw"){
           ...GatsbyContentfulFluid_withWebp
         }
       }
     }
     aboutPhoto: contentfulPhotos(title: {eq: "aboutPhoto"}) {
       photo {
-        fluid (sizes: "(max-width: 750) 90vw, 50vw") {
+        fluid (sizes: "(max-width: 750) 100vw, 50vw") {
           ...GatsbyContentfulFluid_withWebp
         }
       }
@@ -298,7 +298,7 @@ export const query = graphql`
           position
           linkedinUrl
           headshot {
-            fluid {
+            fluid (sizes: "(max-width: 400) 100vw, (max-width: 750) 50vw, (max-width: 1000) 33vw, 20vw") {
               ...GatsbyContentfulFluid_withWebp
             }
           }
@@ -311,7 +311,7 @@ export const query = graphql`
           name
           sector
           photo {
-            fluid {
+            fluid (sizes: "(max-width: 400) 100vw, (max-width: 750) 50vw, (max-width: 1000) 33vw, 20vw") {
               ...GatsbyContentfulFluid_withWebp
             }
           }
