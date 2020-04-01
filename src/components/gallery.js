@@ -71,7 +71,7 @@ class Gallery extends React.Component {
                   index
                   photo {
                     fluid {
-                      ...GatsbyContentfulFluid
+                      ...GatsbyContentfulFluid_withWebp
                     }
                   }
                 }

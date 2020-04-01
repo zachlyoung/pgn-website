@@ -279,14 +279,14 @@ export const query = graphql`
     background: contentfulPhotos(title: {eq: "background"}) {
       photo {
         fluid {
-          ...GatsbyContentfulFluid
+          ...GatsbyContentfulFluid_withWebp
         }
       }
     }
     aboutPhoto: contentfulPhotos(title: {eq: "aboutPhoto"}) {
       photo {
         fluid {
-          ...GatsbyContentfulFluid
+          ...GatsbyContentfulFluid_withWebp
         }
       }
     }
@@ -299,7 +299,7 @@ export const query = graphql`
           linkedinUrl
           headshot {
             fluid {
-              ...GatsbyContentfulFluid
+              ...GatsbyContentfulFluid_withWebp
             }
           }
         }
@@ -312,7 +312,7 @@ export const query = graphql`
           sector
           photo {
             fluid {
-              ...GatsbyContentfulFluid
+              ...GatsbyContentfulFluid_withWebp
             }
           }
         }

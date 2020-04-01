@@ -87,7 +87,7 @@ class Navbar extends React.Component {
           fragment logoFields on File {
             childImageSharp {
               fixed(width: 40) {
-                ...GatsbyImageSharpFixed
+                ...GatsbyImageSharpFixed_withWebp
               }
             }
           }
